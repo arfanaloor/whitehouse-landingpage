@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel WhiteHouse | Kechery's Culinary Landmark</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B211D', /* Darker, richer green */
+                        secondary: '#D4AF37', /* True Metallic Gold */
+                        goldlight: '#F6E6B4',
+                        surface: '#FAFAF9',
+                        dark: '#050F0D',
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Montserrat"', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Elegant Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0B211D; }
+        ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 3px; }
+        
+        /* Reveal Animations */
+        .reveal-text {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-image {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-image.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Glassmorphism & Polish */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #D4AF37 0%, #F6E6B4 50%, #D4AF37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Loader */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #0B211D;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-surface text-gray-800 font-sans antialiased selection:bg-secondary selection:text-white overflow-x-hidden">
+
+    <!-- Initial Loader -->
+    <div id="loader">
+        <div class="text-center">
+            <div class="w-16 h-16 border-t-2 border-l-2 border-secondary rounded-full animate-spin mx-auto mb-4"></div>
+            <h2 class="font-serif text-secondary text-xl tracking-[0.3em]">WHITE HOUSE</h2>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-500 py-6 border-b border-transparent">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="group flex items-center gap-3">
+                <div class="w-12 h-12 border border-secondary/30 rounded-full flex items-center justify-center bg-primary/50 backdrop-blur-md group-hover:border-secondary transition-colors">
+                    <i class="fa-solid fa-crown text-secondary text-lg"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-serif text-2xl text-white tracking-wider font-medium">WHITE <span class="text-secondary">HOUSE</span></span>
+                    <span class="text-[9px] tracking-[0.4em] font-sans text-gray-400 uppercase group-hover:text-secondary transition-colors">Kechery • Est. 2013</span>
+                </div>
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden lg:flex items-center space-x-10">
+                <a href="#dining" class="nav-link text-xs uppercase tracking-[0.2em] text-gray-300 hover:text-secondary transition-colors py-2 border-b border-transparent hover:border-secondary">Dining</a>
+                <a href="#menu" class="nav-link text-xs uppercase tracking-[0.2em] text-gray-300 hover:text-secondary transition-colors py-2 border-b border-transparent hover:border-secondary">Menu</a>
+                <a href="#stay" class="nav-link text-xs uppercase tracking-[0.2em] text-gray-300 hover:text-secondary transition-colors py-2 border-b border-transparent hover:border-secondary">Suites</a>
+                <a href="#banquet" class="nav-link text-xs uppercase tracking-[0.2em] text-gray-300 hover:text-secondary transition-colors py-2 border-b border-transparent hover:border-secondary">Events</a>
+                <a href="#contact" class="bg-gradient-to-r from-secondary to-[#b5952f] text-primary px-8 py-3 rounded-sm text-xs font-bold uppercase tracking-widest hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all transform hover:-translate-y-0.5">Reserve</a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button id="mobile-menu-btn" class="lg:hidden text-white text-2xl hover:text-secondary transition-colors">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative h-screen flex items-center justify-center overflow-hidden bg-primary">
+        <div class="absolute inset-0 z-0">
+            <!-- Dark overlay with gradient for better text readability -->
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-primary/40 to-primary z-10"></div>
+            <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2070&auto=format&fit=crop" 
+                 alt="Hotel White House Exterior" 
+                 class="w-full h-full object-cover scale-105 animate-[slowZoom_20s_infinite_alternate]"
+                 onerror="this.src='https://placehold.co/1920x1080?text=White+House+Exterior'" />
+        </div>
+
+        <!-- Removed mt-12 to fix alignment issues, centering content perfectly -->
+        <div class="relative z-20 text-center px-4 max-w-5xl mx-auto">
+            <div class="reveal-text delay-100 mb-6">
+                <span class="inline-block py-2 px-6 border border-secondary/30 rounded-full bg-black/30 backdrop-blur-sm text-secondary text-[10px] font-bold uppercase tracking-[0.3em]">
+                    The Pride of Kechery
+                </span>
+            </div>
+            <!-- Changed Main Text -->
+            <h1 class="reveal-text delay-200 font-serif text-6xl md:text-8xl lg:text-9xl text-white font-medium leading-[0.9] mb-8">
+                Experience the <br />
+                <span class="italic text-secondary font-light">Art of Hospitality</span>
+            </h1>
+            <p class="reveal-text delay-300 text-gray-300 text-lg font-light tracking-wide max-w-2xl mx-auto mb-12 leading-relaxed">
+                A sanctuary where culinary excellence meets timeless comfort. Discover why we are Kechery's most cherished destination.
+            </p>
+            <div class="reveal-text delay-500 flex flex-col sm:flex-row justify-center gap-6">
+                <a href="#dining" class="group relative px-8 py-4 border border-secondary/50 overflow-hidden">
+                    <div class="absolute inset-0 w-0 bg-secondary transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+                    <span class="relative text-secondary group-hover:text-primary font-bold uppercase tracking-widest text-xs">Explore Dining</span>
+                </a>
+                <a href="#stay" class="group flex items-center gap-3 px-8 py-4 text-white hover:text-secondary transition-colors">
+                    <span class="uppercase tracking-widest text-xs font-bold border-b border-white/30 pb-1 group-hover:border-secondary">Book A Stay</span>
+                    <i class="fa-solid fa-arrow-right text-sm transform group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20 opacity-60 animate-bounce">
+            <span class="text-[9px] uppercase tracking-widest text-white">Scroll</span>
+            <div class="w-[1px] h-12 bg-gradient-to-b from-white to-transparent"></div>
+        </div>
+    </header>
+
+    <!-- Philosophy / Intro (Magazine Layout) -->
+    <section id="dining" class="py-32 bg-surface overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row items-center gap-20">
+                
+                <!-- Image Composition - Added error handling for images -->
+                <div class="lg:w-1/2 relative">
+                    <!-- Decorative Elements -->
+                    <div class="absolute -top-12 -left-12 w-64 h-64 bg-secondary/5 rounded-full blur-3xl"></div>
+                    <div class="absolute -bottom-12 -right-12 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+                    
+                    <div class="relative z-10 grid grid-cols-2 gap-4">
+                        <div class="reveal-image space-y-4 mt-12">
+                            <!-- Replaced with highly reliable fallback if Unsplash fails -->
+                            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1974&auto=format&fit=crop" 
+                                 class="w-full h-64 object-cover grayscale hover:grayscale-0 transition-all duration-700 rounded-sm shadow-xl" 
+                                 alt="Ambience"
+                                 onerror="this.src='https://placehold.co/600x800?text=Ambience'">
+                            <div class="p-6 bg-primary text-white text-center rounded-sm shadow-xl">
+                                <h4 class="font-serif text-3xl text-secondary mb-1">10+</h4>
+                                <p class="text-[10px] uppercase tracking-widest opacity-70">Years of Service</p>
+                            </div>
+                        </div>
+                        <div class="reveal-image">
+                            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop" 
+                                 class="w-full h-96 object-cover grayscale hover:grayscale-0 transition-all duration-700 rounded-sm shadow-2xl" 
+                                 alt="Fine Dining"
+                                 onerror="this.src='https://placehold.co/600x900?text=Fine+Dining'">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Content -->
+                <div class="lg:w-1/2 reveal-text">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="h-[1px] w-12 bg-secondary"></div>
+                        <span class="text-secondary uppercase tracking-[0.3em] text-xs font-bold">The White House Experience</span>
+                    </div>
+                    <h2 class="font-serif text-5xl lg:text-6xl text-primary leading-[1.1] mb-8">
+                        A Symphony of <br/>
+                        <span class="italic text-secondary/80">Local Flavors</span>
+                    </h2>
+                    <p class="text-gray-600 text-lg leading-relaxed mb-8 font-light">
+                        Located on the bustling Guruvayur Road, we are more than a waypoint; we are a destination. Our kitchen is a shrine to the spices of Kerala, where traditional recipes like <span class="font-semibold text-primary">Kurathi Chicken</span> and <span class="font-semibold text-primary">Prawns Jellikettu</span> are crafted with reverence.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-8 border-t border-gray-200 pt-8">
+                        <div>
+                            <h5 class="font-serif text-xl text-primary mb-2">Family Lounge</h5>
+                            <p class="text-sm text-gray-500 leading-relaxed">A dedicated space designed for privacy and comfort for you and your loved ones.</p>
+                        </div>
+                        <div>
+                            <h5 class="font-serif text-xl text-primary mb-2">Late Night Dining</h5>
+                            <p class="text-sm text-gray-500 leading-relaxed">Serving our full menu until 1:00 AM, perfect for the late traveler.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signature Menu (Dark Luxury) -->
+    <section id="menu" class="py-32 bg-primary text-white relative">
+        <!-- Subtle Noise Texture -->
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-20 reveal-text">
+                <span class="text-secondary uppercase tracking-[0.3em] text-xs font-bold mb-4 block">Culinary Masterpieces</span>
+                <h2 class="font-serif text-5xl lg:text-6xl mb-6">Signature Selections</h2>
+                <p class="text-gray-400 font-light">Curated dishes that have earned us a loyal following across Thrissur.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="reveal-image group relative h-[400px] overflow-hidden cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Kurathi Chicken">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity"></div>
+                    
+                    <div class="absolute bottom-0 left-0 p-8 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div class="w-12 h-[1px] bg-secondary mb-4"></div>
+                        <h3 class="font-serif text-2xl text-white mb-2 group-hover:text-secondary transition-colors">Kurathi Chicken</h3>
+                        <p class="text-gray-300 text-sm font-light line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                            Spicy, dry-fried chicken marinated in roasted spices and coconut.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="reveal-image group relative h-[400px] overflow-hidden cursor-pointer lg:mt-12">
+                    <img src="https://images.unsplash.com/photo-1559742811-822873691df8?q=80&w=1974&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Prawns">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity"></div>
+                    
+                    <div class="absolute bottom-0 left-0 p-8 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div class="w-12 h-[1px] bg-secondary mb-4"></div>
+                        <h3 class="font-serif text-2xl text-white mb-2 group-hover:text-secondary transition-colors">Prawns Jellikettu</h3>
+                        <p class="text-gray-300 text-sm font-light line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                            Fiery seafood delicacy tossed in crushed chilies and shallots.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="reveal-image group relative h-[400px] overflow-hidden cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=1974&auto=format&fit=crop" 
+                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                         alt="Kerala Porotta"
+                         onerror="this.src='https://placehold.co/600x400?text=Kerala+Porotta'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity"></div>
+                    
+                    <div class="absolute bottom-0 left-0 p-8 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div class="w-12 h-[1px] bg-secondary mb-4"></div>
+                        <h3 class="font-serif text-2xl text-white mb-2 group-hover:text-secondary transition-colors">Kerala Porotta</h3>
+                        <p class="text-gray-300 text-sm font-light line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                            Flaky, layered bread served with slow-cooked beef roast.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="reveal-image group relative h-[400px] overflow-hidden cursor-pointer lg:mt-12">
+                    <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=2010&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Biryani">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity"></div>
+                    
+                    <div class="absolute bottom-0 left-0 p-8 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <div class="w-12 h-[1px] bg-secondary mb-4"></div>
+                        <h3 class="font-serif text-2xl text-white mb-2 group-hover:text-secondary transition-colors">Dum Biryani</h3>
+                        <p class="text-gray-300 text-sm font-light line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                            Aromatic kaima rice cooked with tender meat and spices.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Accommodation (Minimalist & Clean) -->
+    <section id="stay" class="py-32 bg-surface">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal-text">
+                <div class="max-w-xl">
+                    <span class="text-secondary uppercase tracking-[0.3em] text-xs font-bold mb-4 block">The Residence</span>
+                    <h2 class="font-serif text-5xl text-primary leading-tight">Rest in Refined<br/>Comfort</h2>
+                </div>
+                <a href="#contact" class="hidden md:inline-block text-primary border-b border-primary pb-1 hover:text-secondary hover:border-secondary transition-colors uppercase tracking-widest text-xs font-bold">View All Accommodations</a>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Room 1 -->
+                <div class="reveal-image group">
+                    <div class="relative overflow-hidden h-[400px] mb-8">
+                        <div class="absolute top-4 left-4 bg-white px-4 py-2 text-xs font-bold uppercase tracking-widest z-10">Most Booked</div>
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1974&auto=format&fit=crop" alt="Executive Room" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                    <div class="flex justify-between items-start border-b border-gray-200 pb-6">
+                        <div>
+                            <h3 class="font-serif text-3xl text-primary mb-2">Executive Room</h3>
+                            <p class="text-gray-500 font-light max-w-xs">Ideal for business travelers. Includes workspace and high-speed Wi-Fi.</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="block font-serif text-2xl text-primary">₹2,200</span>
+                            <span class="text-gray-400 text-xs uppercase tracking-wider">Per Night</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Room 2 -->
+                <div class="reveal-image group">
+                    <div class="relative overflow-hidden h-[400px] mb-8">
+                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=2070&auto=format&fit=crop" alt="Royal Suite" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                    <div class="flex justify-between items-start border-b border-gray-200 pb-6">
+                        <div>
+                            <h3 class="font-serif text-3xl text-primary mb-2">The WhiteHouse Suite</h3>
+                            <p class="text-gray-500 font-light max-w-xs">Spacious luxury with city views, living area, and premium amenities.</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="block font-serif text-2xl text-primary">₹3,500</span>
+                            <span class="text-gray-400 text-xs uppercase tracking-wider">Per Night</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12 md:hidden">
+                <a href="#contact" class="inline-block text-primary border-b border-primary pb-1 uppercase tracking-widest text-xs font-bold">View All Accommodations</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Call to Action -->
+    <section id="banquet" class="py-24 bg-white border-t border-gray-100">
+        <div class="container mx-auto px-6 text-center reveal-text">
+            <div class="inline-block p-4 border border-secondary/20 rounded-full mb-8">
+                <i class="fa-solid fa-champagne-glasses text-3xl text-secondary"></i>
+            </div>
+            <h2 class="font-serif text-5xl text-primary mb-6">Hosting a Celebration?</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto mb-10 font-light text-lg">
+                From intimate gatherings to grand receptions, our banquet halls provide the perfect backdrop. 
+                Let us handle the details while you make memories.
+            </p>
+            <button class="px-10 py-4 bg-primary text-white text-xs font-bold uppercase tracking-[0.2em] hover:bg-secondary hover:text-primary transition-colors duration-300">
+                Inquire Availability
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer (High End) -->
+    <footer id="contact" class="bg-dark text-white pt-24 pb-12 border-t border-white/10">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-4 gap-16 mb-20">
+                <!-- Brand -->
+                <div class="lg:col-span-1">
+                    <a href="#" class="block mb-8">
+                        <span class="font-serif text-3xl tracking-wider">WHITE <span class="text-secondary">HOUSE</span></span>
+                    </a>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-8 font-light">
+                        A symbol of hospitality in Kechery. We invite you to experience the perfect blend of traditional flavors and modern luxury.
+                    </p>
+                    <div class="flex gap-6">
+                        <a href="#" class="text-gray-400 hover:text-secondary transition-colors"><i class="fa-brands fa-instagram text-lg"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-secondary transition-colors"><i class="fa-brands fa-facebook-f text-lg"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-secondary transition-colors"><i class="fa-brands fa-whatsapp text-lg"></i></a>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div>
+                    <h4 class="text-secondary text-xs font-bold uppercase tracking-[0.2em] mb-8">Explore</h4>
+                    <ul class="space-y-4 text-sm text-gray-400 font-light">
+                        <li><a href="#dining" class="hover:text-white transition-colors">Dining Experience</a></li>
+                        <li><a href="#menu" class="hover:text-white transition-colors">Signature Menu</a></li>
+                        <li><a href="#stay" class="hover:text-white transition-colors">Accommodation</a></li>
+                        <li><a href="#banquet" class="hover:text-white transition-colors">Private Events</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-secondary text-xs font-bold uppercase tracking-[0.2em] mb-8">Contact</h4>
+                    <ul class="space-y-4 text-sm text-gray-400 font-light">
+                        <li class="flex items-start gap-4">
+                            <span class="mt-1 text-secondary"><i class="fa-solid fa-location-dot"></i></span>
+                            <span>Guruvayur Road, Kaiparambu,<br>Kechery, Thrissur - 680546</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <span class="text-secondary"><i class="fa-solid fa-phone"></i></span>
+                            <span>+91 4885 2xxxxxx</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <span class="text-secondary"><i class="fa-solid fa-envelope"></i></span>
+                            <span>info@whitehousekechery.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Hours -->
+                <div>
+                    <h4 class="text-secondary text-xs font-bold uppercase tracking-[0.2em] mb-8">Hours</h4>
+                    <ul class="space-y-4 text-sm text-gray-400 font-light">
+                        <li class="flex justify-between border-b border-white/10 pb-3">
+                            <span>Restaurant</span>
+                            <span class="text-white">8:00 AM - 1:00 AM</span>
+                        </li>
+                        <li class="flex justify-between border-b border-white/10 pb-3">
+                            <span>Reception</span>
+                            <span class="text-white">24 Hours</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-white/10 text-[10px] text-gray-500 uppercase tracking-widest">
+                <p>&copy; 2024 Hotel WhiteHouse. All rights reserved.</p>
+                <div class="flex gap-8 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white">Privacy Policy</a>
+                    <a href="#" class="hover:text-white">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Loading Animation
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 800);
+            }, 1000);
+        });
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-primary/90', 'backdrop-blur-md', 'shadow-lg', 'py-3');
+                navbar.classList.remove('py-6', 'border-transparent');
+                navbar.classList.add('border-white/5');
+            } else {
+                navbar.classList.remove('bg-primary/90', 'backdrop-blur-md', 'shadow-lg', 'py-3', 'border-white/5');
+                navbar.classList.add('py-6', 'border-transparent');
+            }
+        });
+
+        // Reveal on Scroll
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-text, .reveal-image').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth Scroll for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
